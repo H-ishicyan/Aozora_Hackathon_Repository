@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if g.user %}
+    <a class="action" href="{{ url_for('history.index') }}">履歴照会へ</a>
+    <a class="action" href="{{ url_for('top.index') }}">サマリTOPへ</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  <h1>{% block title %}家族の一覧{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('family.createfamily') }}">新規登録</a>
+  {% endif %}
+
+  {% for post in postfamily %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ post['ship'] }}</h1>
+          <div class="about">ユーザー {{ post['username'] }} 名前 {{ post['famname']}}</div>
+        </div>
+        {% if g.user['id'] == post['author_id'] %}
+          <a class="action" href="{{ url_for('family.update', id=post['id']) }}">編集する</a>
+        {% endif %}
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+
+{% endblock %}

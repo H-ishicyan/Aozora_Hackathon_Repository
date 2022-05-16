@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}家族を登録する{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype="multipart/form-data">
+    <label for="ship">家族の続柄</label>
+    <input name="ship" id="ship" value="{{ request.form['ship'] }}" required>
+
+    <label for="famname">家族の名前</label>
+    <textarea name="famname" id="famname">{{ request.form['famname'] }}</textarea>
+
+    <label for="addres">連絡先</label>
+    <textarea name="addres" id="addres">{{ request.form['addres'] }}</textarea>
+
+    <label for="img">写真</label>
+    <input type="file" name="file">
+
+
+    <input type="submit" value="保存">
+  </form>
+
+  <a href="/fam/main">戻る</a>
+
+
+{% endblock %}
