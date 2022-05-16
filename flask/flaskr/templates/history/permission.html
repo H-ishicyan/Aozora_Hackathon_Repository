@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}リクエスト詳細{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <label for="date">日付</label>
+  <span name="date" id="date">{{ postdata['date'] }}</span>
+    
+  <label for="action">行動</label>
+  <span name="action" id="action">{{ postdata['action'] }}</span>
+  
+  <label for="money">金額</label>
+  <span name="money" id="money">{{ postdata['money'] }}</span>
+  
+  <label for="place">誰に</label>
+  <span name="place" id="place">{{ postdata['place'] }}</span>
+
+<form action="POST">
+  <input type="submit" value="認証する">
+</form>
+
+
+<a href="{{ url_for('history.index') }}">戻る</a>
+
+{% endblock %}

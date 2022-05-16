@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if g.user %}
+    <a class="action" href="{{ url_for('family.index') }}">家族一覧へ</a>
+    <a class="action" href="{{ url_for('history.index') }}">履歴照会へ</a>
+
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<h1>{% block title %}おばあのサマリ{% endblock %}</h1>
+
+{% endblock %}
