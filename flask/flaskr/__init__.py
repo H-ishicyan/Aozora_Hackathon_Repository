@@ -11,6 +11,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev', #本番時にはKeyの種類を変えたほうがいいよ
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'), #DBの指定をしてるよ
         bootstrap = Bootstrap(app)
+
     )
 
     if test_config is None:

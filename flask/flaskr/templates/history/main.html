@@ -16,7 +16,16 @@
     <article class="postdata">
       <div>
         <h2>{{ post['date'] }}</h2>
-        <div class="postdetail">行動: {{ post['action'] }} 金額: {{ post['money']}}</div>
+        <div class="postdetail">行動： {{ post['action'] }} 金額： {{ post['money']}}</div>
+        {% if post['flag'] == 2 %}
+          <div class="flag2">取引却下</div>
+        {% endif %}
+        {% if post['flag'] == 1 %}
+          <div class="flag1">承認済み</div>
+        {% endif %}
+        {% if post['flag'] == 0 %}
+          <div class="flag0">未承認</div>
+        {% endif %}
       </div>
 
       {% if g.user['id'] == post['author_id'] %}
