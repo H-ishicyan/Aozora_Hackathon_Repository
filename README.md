@@ -1,5 +1,18 @@
 # Aozora_Hackathon_Repository
 - ハッカソン用のレポジトリ
+## flaskサーバー起動方法
+- flask/flaskr/のディレクトリで
+```
+export FLASK_APP=__init__.py
+```
+```
+flask run
+```
+- DBの初期化（instance/flaskr.sqliet　が無い場合)
+```
+flask init-db
+```
+
 ## 要件
 - 離れた祖母の入出金行動履歴を追い、解析結果をサマリレポートで可視化
 - 振り込みをする場合は家族の誰かが承認をする必要がある
