@@ -8,10 +8,9 @@ def create_app(test_config=None):
     # 初期設定だよ
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev', #本番時にはKeyの種類を変えたほうがいいよ
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'), #DBの指定をしてるよ
+        SECRET_KEY='dev', #デプロイ時はKeyをしっかり暗号化する
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'), #DBの指定
         bootstrap = Bootstrap(app)
-
     )
 
     if test_config is None:

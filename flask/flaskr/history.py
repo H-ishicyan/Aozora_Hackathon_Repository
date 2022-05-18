@@ -14,6 +14,7 @@ bp = Blueprint('history', __name__,url_prefix='/history')
 
 """一覧画面の処理"""
 @bp.route('/main')
+@login_required
 def index():
   db = get_db()
   postdata = db.execute(
@@ -46,7 +47,7 @@ def get_post(id, check_author=True):
 def permission(id):
   postdata = get_post(id)
 
-    ##認証ボタン押されたときの処理
+  ##--認証ボタン押されたときの処理--##
   if request.method == 'POST':
     db = get_db()
     flag = 1
@@ -74,7 +75,7 @@ def permission(id):
 @login_required
 def warning(id):
   postdata = get_post(id)
-  ##完全却下するボタン押されたときの処理
+##--完全却下するボタン押されたときの処理-##
   if request.method == 'POST':
     db = get_db()
     flag = 2
@@ -92,7 +93,7 @@ def warning(id):
 
 
 
-"""LINE通知"""
+"""LINE通知のための関数"""
 def main(msg):
   send_line_notify(msg)
 
@@ -100,7 +101,7 @@ def send_line_notify(notification_message):
   """
   LINEに通知する
   """
-  line_notify_token = 'C6PXIUkkHkrDYnpZAdqvxFJzseMMTcpIO8F6udZl9Yg'
+  line_notify_token = 'C6PXIUkkHkrDYnpZAdqvxFJzseMMTcpIO8F6udZl9Yg' ## 後で隠す
   line_notify_api = 'https://notify-api.line.me/api/notify'
   headers = {'Authorization': f'Bearer {line_notify_token}'}
   data = {'message': f'{notification_message}'}
