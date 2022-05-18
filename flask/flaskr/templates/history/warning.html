@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}リクエスト詳細{% endblock %}</h1>
+  <h1>{% block title %}警告！！{% endblock %}</h1>
+  <h2>この取引を却下すると下記の取引内容を差し戻す事になりますがよろしいですか？</h2>
 {% endblock %}
 
 {% block content %}
@@ -19,15 +20,16 @@
   
   {% if postdata['flag'] == 0 %}
     <form method="post">
-      <input type="submit" value="承認する" onclick="return confirm('本当に承認しますか?');">
+      <input type="submit" value="合意する" onclick="return confirm('本当によろしいですね?');">
     </form>
 
-    <div>
-      <a class="warning" href="{{ url_for('history.warning', id=postdata['id']) }}">この取引を却下する</a>
+    <div id="not_submit">
+      <a href="{{ url_for('history.index') }}">キャンセル</a>
     </div>
     
+      
   {% endif %}
 
-<a href="{{ url_for('history.index') }}">戻る</a>
+
 
 {% endblock %}

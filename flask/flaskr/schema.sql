@@ -26,5 +26,6 @@ CREATE TABLE apidata (
   action TEXT NOT NULL,
   place TEXT NOT NULL,
   money INTEGER NOT NULL,
+  flag INTEGER NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );

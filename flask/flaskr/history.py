@@ -1,5 +1,6 @@
 from crypt import methods
 from distutils.log import error
+from webbrowser import get
 from wsgiref.util import shift_path_info
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for,session
 from werkzeug.exceptions import abort
@@ -7,6 +8,7 @@ from flaskr.auth import login_required
 from flaskr.db import get_db
 from werkzeug.utils import secure_filename
 import base64
+import requests
 
 bp = Blueprint('history', __name__,url_prefix='/history')
 
@@ -15,7 +17,7 @@ bp = Blueprint('history', __name__,url_prefix='/history')
 def index():
   db = get_db()
   postdata = db.execute(
-    'SELECT d.id, author_id, date, action, place, money'
+    'SELECT d.id, author_id, date, action, place, money, flag'
     ' FROM apidata d JOIN user u ON d.author_id = u.id'
     ' ORDER BY date DESC'
   ).fetchall()
@@ -25,7 +27,7 @@ def index():
 """認証画面に遷移する際にIDが一致しているか確認"""
 def get_post(id, check_author=True):
   postdata = get_db().execute(
-    'SELECT d.id, author_id, date, action, place, money'
+    'SELECT d.id, author_id, date, action, place, money, flag'
     ' FROM apidata d JOIN user u ON d.author_id = u.id'
     ' WHERE d.id = ?', (id,)
   ).fetchone()
@@ -44,6 +46,20 @@ def get_post(id, check_author=True):
 def permission(id):
   postdata = get_post(id)
 
+    ##認証ボタン押されたときの処理
+  if request.method == 'POST':
+    db = get_db()
+    flag = 1
+    msg = '取引が承認されました'
+    db.execute(
+        'UPDATE apidata SET flag = ?'
+        ' WHERE id = ?',
+        (flag,id)
+      )
+    db.commit()
+    main(msg)
+    return redirect(url_for('history.index'))
+
   db = get_db()
   postfamily = db.execute(
     'SELECT f.id, ship, famname, addres, author_id, username'
@@ -52,6 +68,52 @@ def permission(id):
   ).fetchall()
 
   return render_template('history/permission.html', postfamily=postfamily, postdata=postdata)
+
+"""却下時の処理"""
+@bp.route('history/<int:id>warning', methods=('GET','POST'))
+@login_required
+def warning(id):
+  postdata = get_post(id)
+  ##完全却下するボタン押されたときの処理
+  if request.method == 'POST':
+    db = get_db()
+    flag = 2
+    msg = '取引が完全に却下されました'
+    db.execute(
+        'UPDATE apidata SET flag = ?'
+        ' WHERE id = ?',
+        (flag,id)
+      )
+    db.commit()
+    main(msg)
+    return redirect(url_for('history.index'))
+
+  return render_template('history/warning.html',postdata=postdata)
+
+
+
+"""LINE通知"""
+def main(msg):
+  send_line_notify(msg)
+
+def send_line_notify(notification_message):
+  """
+  LINEに通知する
+  """
+  line_notify_token = 'C6PXIUkkHkrDYnpZAdqvxFJzseMMTcpIO8F6udZl9Yg'
+  line_notify_api = 'https://notify-api.line.me/api/notify'
+  headers = {'Authorization': f'Bearer {line_notify_token}'}
+  data = {'message': f'{notification_message}'}
+  requests.post(line_notify_api, headers = headers, data = data)
+
+if __name__ == "__main__":
+  main()
+
+
+
+
+
+
 
 
 
