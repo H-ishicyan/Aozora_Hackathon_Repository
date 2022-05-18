@@ -12,10 +12,11 @@ bp = Blueprint('family', __name__, url_prefix='/fam')
 
 """家族一覧ページ"""
 @bp.route('/main', methods=('GET', 'POST'))
+@login_required
 def index():
   db = get_db()
   postfamily = db.execute(
-    'SELECT f.id, ship, famname, addres, author_id, username'
+    'SELECT f.id, ship, famname, addres, author_id, username, filepath'
     ' FROM family f JOIN user u ON f.author_id = u.id'
     ' ORDER BY created DESC'
   ).fetchall()
@@ -33,7 +34,7 @@ def createfamily():
     addres = request.form['addres']
     files = request.files.get('file')
     filename = secure_filename(files.filename)
-    filepath = 'static/image/' + filename
+    filepath = 'static/family_img/' + filename
 
     # img_date = base64.b64encode(file())
     # img_str = img_date.decode('utf-8')

@@ -19,7 +19,8 @@
       <header>
         <div>
           <h1>{{ post['ship'] }}</h1>
-          <div class="about">ユーザー {{ post['username'] }} 名前 {{ post['famname']}}</div>
+          <div class="about">名前 {{ post['famname']}}</div>
+          <div><img src="../../{{ post['filepath'] }}" width="300px" height="300px"></div>
         </div>
         {% if g.user['id'] == post['author_id'] %}
           <a class="action" href="{{ url_for('family.update', id=post['id']) }}">編集する</a>
