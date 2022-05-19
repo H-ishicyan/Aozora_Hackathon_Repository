@@ -18,9 +18,22 @@
   <span name="money" id="money">{{ postdata['money'] }}</span>
   
   {% if postdata['flag'] == 0 %}
-    <form method="post">
+  <form method="post">
+
+    <div>
+      <label for="shipname">誰の承認か選択</label>
+        <select name="family" id="family">
+        {% for family in postfamily %}
+          <option value="{{ family['famname'] }}">{{ family['famname'] }}</option>
+        {% endfor %}
+        </select>
+    </div>
+
+    <div>
       <input type="submit" value="承認する" onclick="return confirm('本当に承認しますか?');">
-    </form>
+    </div>
+
+  </form>
 
     <div>
       <a class="warning" href="{{ url_for('history.warning', id=postdata['id']) }}">この取引を却下する</a>

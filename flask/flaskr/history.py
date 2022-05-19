@@ -9,6 +9,7 @@ from flaskr.db import get_db
 from werkzeug.utils import secure_filename
 import base64
 import requests
+import flaskr.Line_notify
 
 bp = Blueprint('history', __name__,url_prefix='/history')
 
@@ -18,10 +19,12 @@ bp = Blueprint('history', __name__,url_prefix='/history')
 def index():
   db = get_db()
   postdata = db.execute(
-    'SELECT d.id, author_id, date, action, place, money, flag'
-    ' FROM apidata d JOIN user u ON d.author_id = u.id'
-    ' ORDER BY date DESC'
+    'SELECT d.id, d.author_id, d.date, d.action, d.place, d.money, d.flag, d.permit, f.filepath'
+    ' FROM apidata AS d LEFT OUTER JOIN user AS u ON d.author_id = u.id'
+    ' LEFT OUTER JOIN family AS f ON d.permit = f.famname'
+    ' ORDER BY d.date DESC'
   ).fetchall()
+  print(postdata)
   return render_template('history/main.html', postdata=postdata)
 
 
@@ -47,26 +50,27 @@ def get_post(id, check_author=True):
 def permission(id):
   postdata = get_post(id)
 
-  ##--認証ボタン押されたときの処理--##
-  if request.method == 'POST':
-    db = get_db()
-    flag = 1
-    msg = '取引が承認されました'
-    db.execute(
-        'UPDATE apidata SET flag = ?'
-        ' WHERE id = ?',
-        (flag,id)
-      )
-    db.commit()
-    main(msg)
-    return redirect(url_for('history.index'))
-
   db = get_db()
   postfamily = db.execute(
     'SELECT f.id, ship, famname, addres, author_id, username'
     ' FROM family f JOIN user u ON f.author_id = u.id'
     ' ORDER BY created DESC'
   ).fetchall()
+
+  ##--認証ボタン押されたときの処理--##
+  if request.method == 'POST':
+    db = get_db()
+    famname = request.form.get('family') #承認者の名前
+    flag = 1 #承認フラグ
+    msg = '取引が承認されました' #LINE通知用のメッセージ
+    db.execute(
+        'UPDATE apidata SET flag = ?, permit = ?'
+        ' WHERE id = ?',
+        (flag, famname, id)
+      )
+    db.commit()
+    main(msg) ##LINE通知モジュールへ渡す
+    return redirect(url_for('history.index'))
 
   return render_template('history/permission.html', postfamily=postfamily, postdata=postdata)
 
