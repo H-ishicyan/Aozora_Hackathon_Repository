@@ -27,5 +27,6 @@ CREATE TABLE apidata (
   place TEXT NOT NULL,
   money INTEGER NOT NULL,
   flag INTEGER NOT NULL,
+  permit TEXT,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );

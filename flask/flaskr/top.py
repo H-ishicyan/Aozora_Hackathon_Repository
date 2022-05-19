@@ -19,6 +19,9 @@ def index():
     ' FROM apidata d JOIN user u ON d.author_id = u.id'
     ' ORDER BY date DESC'
   ).fetchall()
+
+
+
   return render_template('top/index.html', postdata=postdata)
 
 

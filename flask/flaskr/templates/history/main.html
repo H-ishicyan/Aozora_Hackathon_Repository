@@ -17,19 +17,28 @@
       <div>
         <h2>{{ post['date'] }}</h2>
         <div class="postdetail">行動： {{ post['action'] }} 金額： {{ post['money']}}</div>
+
         {% if post['flag'] == 2 %}
           <div class="flag2">取引却下</div>
+          <div class="name">{{ post['permit']}}が却下しました。</div>
+          <div><img src="../../{{ post['filepath'] }}" width="50px" height="50px"></div>
         {% endif %}
+
         {% if post['flag'] == 1 %}
           <div class="flag1">承認済み</div>
+          <div class="name">{{ post['permit']}}が承認しました。</div>
+          <div><img src="../../{{ post['filepath'] }}" width="50px" height="50px"></div>
         {% endif %}
+
         {% if post['flag'] == 0 %}
           <div class="flag0">未承認</div>
         {% endif %}
       </div>
 
       {% if g.user['id'] == post['author_id'] %}
+      <div>
         <a class="action" href="{{ url_for('history.permission', id=post['id']) }}">詳細</a>
+      </div>
       {% endif %}
     </article>
 
