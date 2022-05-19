@@ -12,6 +12,11 @@ flask run
 ```
 flask init-db
 ```
+- flaskr.sqliteを使用する場合のログインIDとパスワード
+```
+ID: admin
+PW: admin
+```
 
 ## 要件
 - 離れた祖母の入出金行動履歴を追い、解析結果をサマリレポートで可視化
